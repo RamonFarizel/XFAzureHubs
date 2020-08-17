@@ -1,9 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using ConsoleNotificationDispatcher.Settings;
+using Microsoft.Azure.NotificationHubs;
 
 namespace ConsoleNotificationDispatcher
 {
     class Program
     {
+        static int messageCount;
+
         static void Main(string[] args)
         {
             Console.WriteLine($"Press the spacebar to send a message to each tag in {string.Join(", ", DispatcherConstants.SubscriptionTags)}");
@@ -26,10 +33,19 @@ namespace ConsoleNotificationDispatcher
             // as a parameter
             foreach (var tag in DispatcherConstants.SubscriptionTags)
             {
-                templateParameters["messageParam"] = $"Notification #{messageCount} to {tag} category subscribers!";
                 try
                 {
-                    await hub.SendTemplateNotificationAsync(templateParameters, tag);
+                    string jsonPayload =
+                    "{" +
+                            getQuotedString("data") + ":" +
+                            "{" +
+                                getQuotedString("title") + ":" + getQuotedString("Titulo TESTE") + "," +
+                                getQuotedString("body") + ":" + getQuotedString("Mensagem de teste") +
+                            "}" +
+                    "}";
+                    await hub.SendFcmNativeNotificationAsync(jsonPayload, tag);
+                    await hub.SendAppleNativeNotificationAsync(jsonPayload, tag);
+
                     Console.WriteLine($"Sent message to {tag} subscribers.");
                 }
                 catch (Exception ex)
@@ -45,6 +61,11 @@ namespace ConsoleNotificationDispatcher
         private static void WriteSeparator()
         {
             Console.WriteLine("==========================================================================");
+        }
+
+        static string getQuotedString(string str)
+        {
+            return "\"" + str + "\"";
         }
 
     }

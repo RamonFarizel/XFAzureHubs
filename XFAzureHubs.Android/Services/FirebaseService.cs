@@ -45,26 +45,29 @@ namespace XFAzureHubs.Droid.Services
         {
             base.OnMessageReceived(message);
             string messageBody = string.Empty;
+            string messageTitle = string.Empty;
 
             if (message.GetNotification() != null)
             {
                 messageBody = message.GetNotification().Body;
+                messageTitle = message.GetNotification().Title;
             }
 
             // NOTE: test messages sent via the Azure portal will be received here
             else
             {
                 messageBody = message.Data.Values.First();
+                messageTitle = message.Data.Values.Last();
             }
 
             // convert the incoming message to a local notification
-            SendLocalNotification(messageBody);
+            SendLocalNotification(messageTitle, messageBody);
 
             // send the incoming message directly to the MainPage
             SendMessageToMainPage(messageBody);
         }
 
-        void SendLocalNotification(string body)
+        void SendLocalNotification(string title,string body)
         {
             var intent = new Intent(this, typeof(MainActivity));
             intent.AddFlags(ActivityFlags.ClearTop);
@@ -75,7 +78,7 @@ namespace XFAzureHubs.Droid.Services
             var pendingIntent = PendingIntent.GetActivity(this, requestCode, intent, PendingIntentFlags.OneShot);
 
             var notificationBuilder = new NotificationCompat.Builder(this)
-                .SetContentTitle("XamarinNotify Message")
+                .SetContentTitle(title)
                 .SetSmallIcon(Resource.Drawable.ic_launcher)
                 .SetContentText(body)
                 .SetAutoCancel(true)
