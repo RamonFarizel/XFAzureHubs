@@ -63,10 +63,5 @@ namespace ConsoleNotificationDispatcher
             Console.WriteLine("==========================================================================");
         }
 
-        static string getQuotedString(string str)
-        {
-            return "\"" + str + "\"";
-        }
-
     }
 }
