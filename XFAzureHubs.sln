@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XFAzureHubs.iOS", "XFAzureH
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XFAzureHubs", "XFAzureHubs\XFAzureHubs.csproj", "{54715204-A4B8-4DF7-808E-843DA15B2C37}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleNotificationDispatcher", "ConsoleNotificationDispatcher\ConsoleNotificationDispatcher.csproj", "{EB9C9ED1-4339-47D7-8C54-BD029B632D69}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,5 +55,17 @@ Global
 		{54715204-A4B8-4DF7-808E-843DA15B2C37}.Debug|iPhone.Build.0 = Debug|Any CPU
 		{54715204-A4B8-4DF7-808E-843DA15B2C37}.Release|iPhone.ActiveCfg = Release|Any CPU
 		{54715204-A4B8-4DF7-808E-843DA15B2C37}.Release|iPhone.Build.0 = Release|Any CPU
+		{EB9C9ED1-4339-47D7-8C54-BD029B632D69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB9C9ED1-4339-47D7-8C54-BD029B632D69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB9C9ED1-4339-47D7-8C54-BD029B632D69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB9C9ED1-4339-47D7-8C54-BD029B632D69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB9C9ED1-4339-47D7-8C54-BD029B632D69}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{EB9C9ED1-4339-47D7-8C54-BD029B632D69}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{EB9C9ED1-4339-47D7-8C54-BD029B632D69}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{EB9C9ED1-4339-47D7-8C54-BD029B632D69}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{EB9C9ED1-4339-47D7-8C54-BD029B632D69}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{EB9C9ED1-4339-47D7-8C54-BD029B632D69}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{EB9C9ED1-4339-47D7-8C54-BD029B632D69}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{EB9C9ED1-4339-47D7-8C54-BD029B632D69}.Release|iPhone.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
