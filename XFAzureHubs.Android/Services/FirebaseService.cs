@@ -47,18 +47,9 @@ namespace XFAzureHubs.Droid.Services
             string messageBody = string.Empty;
             string messageTitle = string.Empty;
 
-            if (message.GetNotification() != null)
-            {
-                messageBody = message.GetNotification().Body;
-                messageTitle = message.GetNotification().Title;
-            }
+            messageTitle = message.Data.Values.First();
+            messageBody = message.Data.Values.Last();
 
-            // NOTE: test messages sent via the Azure portal will be received here
-            else
-            {
-                messageBody = message.Data.Values.First();
-                messageTitle = message.Data.Values.Last();
-            }
 
             // convert the incoming message to a local notification
             SendLocalNotification(messageTitle, messageBody);
@@ -67,7 +58,7 @@ namespace XFAzureHubs.Droid.Services
             SendMessageToMainPage(messageBody);
         }
 
-        void SendLocalNotification(string title,string body)
+        void SendLocalNotification(string title, string body)
         {
             var intent = new Intent(this, typeof(MainActivity));
             intent.AddFlags(ActivityFlags.ClearTop);
@@ -99,5 +90,5 @@ namespace XFAzureHubs.Droid.Services
             Log.Debug(AppConstants.DebugTag, body);
         }
     }
-    
+
 }

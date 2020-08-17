@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using ConsoleNotificationDispatcher.NotificationModel;
+using ConsoleNotificationDispatcher.NotificationModel.Android;
 using ConsoleNotificationDispatcher.NotificationModel.IOS;
 using ConsoleNotificationDispatcher.Settings;
 using Microsoft.Azure.NotificationHubs;
@@ -38,20 +39,12 @@ namespace ConsoleNotificationDispatcher
             {
                 try
                 {
-                    string jsonPayload =
-                    "{" +
-                            getQuotedString("message") + ":" +
-                            "{" + getQuotedString("notification") + ":" +
-                                    "{" +
-                                            getQuotedString("title") + ":" + getQuotedString("Titulo TESTE") + "," +
-                                            getQuotedString("body") + ":" + getQuotedString("Mensagem de teste") +
-                                    "}" +
-                            "}" +
-                    "}";
-                    await hub.SendFcmNativeNotificationAsync(jsonPayload, tag);
+                    var messageAndroid = JsonConvert.SerializeObject(new PayloadAndroid(new Data("Message Title", "Message Body")));
+                    await hub.SendFcmNativeNotificationAsync(messageAndroid, tag);
 
-                    var MessageiOS = JsonConvert.SerializeObject(new PayloadIOS(new Aps(new Alert("Message Title","Message Body"))));
-                    await hub.SendAppleNativeNotificationAsync(MessageiOS, tag);
+                    var messageiOS = JsonConvert.SerializeObject(new PayloadIOS(new Aps(new Alert("Message Title","Message Body"))));
+                    await hub.SendAppleNativeNotificationAsync(messageiOS, tag);
+
 
                     Console.WriteLine($"Sent message to {tag} subscribers.");
                 }
