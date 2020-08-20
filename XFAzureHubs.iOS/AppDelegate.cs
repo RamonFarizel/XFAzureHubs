@@ -8,6 +8,7 @@ using UIKit;
 using UserNotifications;
 using WindowsAzure.Messaging;
 using XFAzureHubs.Settings;
+using XFAzureHubs.Views;
 
 namespace XFAzureHubs.iOS
 {
@@ -112,37 +113,43 @@ namespace XFAzureHubs.iOS
             base.FailedToRegisterForRemoteNotifications(application, error);
         }
 
-        public override void ReceivedRemoteNotification(UIApplication application, NSDictionary userInfo)
-        {
-            ProcessNotification(userInfo, false);
-        }
+        //public override void ReceivedRemoteNotification(UIApplication application, NSDictionary userInfo)
+        //{
+        //    ProcessNotification(userInfo, false);
+        //}
 
-        void ProcessNotification(NSDictionary options, bool fromFinishedLaunching)
-        {
-            // make sure we have a payload
-            if (options != null && options.ContainsKey(new NSString("aps")))
-            {
-                // get the APS dictionary and extract message payload. Message JSON will be converted
-                // into a NSDictionary so more complex payloads may require more processing
-                NSDictionary aps = options.ObjectForKey(new NSString("aps")) as NSDictionary;
-                string payload = string.Empty;
-                NSString payloadKey = new NSString("alert");
-                if (aps.ContainsKey(payloadKey))
-                {
-                    payload = aps[payloadKey].ToString();
-                }
+        //void ProcessNotification(NSDictionary options, bool fromFinishedLaunching)
+        //{
+        //    // make sure we have a payload
+        //    if (options != null && options.ContainsKey(new NSString("aps")))
+        //    {
+        //        // get the APS dictionary and extract message payload. Message JSON will be converted
+        //        // into a NSDictionary so more complex payloads may require more processing
+        //        NSDictionary aps = options.ObjectForKey(new NSString("aps")) as NSDictionary;
+        //        string payload = string.Empty;
+        //        NSString payloadKey = new NSString("alert");
+        //        if (aps.ContainsKey(payloadKey))
+        //        {
+        //            payload = aps[payloadKey].ToString();
+        //        }
 
-                if (!string.IsNullOrWhiteSpace(payload))
-                {
-                    Debug.WriteLine(payload);
-                }
+        //        if (!string.IsNullOrWhiteSpace(payload))
+        //        {
+        //            Debug.WriteLine(payload);
+        //        }
 
-            }
-            else
-            {
-                Debug.WriteLine($"Received request to process notification but there was no payload.");
-            }
-        }
+        //    }
+        //    else
+        //    {
+        //        Debug.WriteLine($"Received request to process notification but there was no payload.");
+        //    }
+        //}
+
+        //[Export("application:didReceiveRemoteNotification:fetchCompletionHandler:")]
+        //public void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo, Action<UIBackgroundFetchResult> completionHandler)
+        //{
+        //    throw new System.NotImplementedException();
+        //}
     }
 
     [Preserve(AllMembers = true)]
@@ -159,6 +166,33 @@ namespace XFAzureHubs.iOS
             completionHandler(UNNotificationPresentationOptions.Alert |
                               UNNotificationPresentationOptions.Badge |
                               UNNotificationPresentationOptions.Sound);
+        }
+
+        [Export("userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:")]
+        public void DidReceiveNotificationResponse(UNUserNotificationCenter center, UNNotificationResponse response, Action completionHandler)
+        {
+            var userInfo = response.Notification.Request.Content.UserInfo as NSDictionary;
+
+            var aps = userInfo.ObjectForKey(new NSString("aps")) as NSDictionary;
+            var alert = aps.ObjectForKey(new NSString("alert")) as NSDictionary;
+
+            var dictionary = alert.ToDictionary(x => x.Key.ToString(), x => x.Value.ToString());
+
+            var type = string.Empty;
+            var id = string.Empty;
+
+            if (dictionary.ContainsKey(AppConstants.TYPE_VALUE))
+                type = dictionary[AppConstants.TYPE_VALUE];
+
+            if (dictionary.ContainsKey(AppConstants.ID_VALUE))
+                id = dictionary[AppConstants.ID_VALUE];
+
+
+            //(App.Current.MainPage as MainPage)?.Navigation.PushAsync(new SecondPage(type));
+
+            App.Current.MainPage.Navigation.PushAsync(new SecondPage(type,id));
+
+            Debug.WriteLine(type);
         }
     }
 }

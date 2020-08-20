@@ -48,6 +48,7 @@ namespace XFAzureHubs.Droid.Services
             string messageBody = string.Empty;
             string messageTitle = string.Empty;
             string messageType = string.Empty;
+            string messageId = string.Empty;
 
             var messageDictionary = message.Data.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
@@ -62,13 +63,16 @@ namespace XFAzureHubs.Droid.Services
             if (messageDictionary.ContainsKey(AppConstants.TYPE_VALUE))
                 messageType = GetValueFromMessageDictionary(AppConstants.TYPE_VALUE, messageDictionary);
 
+            if (messageDictionary.ContainsKey(AppConstants.ID_VALUE))
+                messageId = GetValueFromMessageDictionary(AppConstants.ID_VALUE, messageDictionary);
+
 
 
 
             //messageBody = message.Data.Values.Last();
 
             // convert the incoming message to a local notification
-            SendLocalNotification(messageTitle, messageBody, messageType);
+            SendLocalNotification(messageTitle, messageBody, messageType, messageId);
 
             // send the incoming message directly to the MainPage
             SendMessageToMainPage(messageBody);
@@ -78,11 +82,16 @@ namespace XFAzureHubs.Droid.Services
             messageDictionary.GetValueOrDefault(key, string.Empty);
 
 
-        void SendLocalNotification(string title, string body, string type)
+        void SendLocalNotification(string title, string body, string type, string id)
         {
+            Bundle extras = new Bundle();
+            extras.PutString(AppConstants.TYPE_VALUE,type);
+            extras.PutString(AppConstants.ID_VALUE, id);
+
             var intent = new Intent(this, typeof(MainActivity));
             intent.AddFlags(ActivityFlags.ClearTop);
-            intent.PutExtra(AppConstants.TYPE_VALUE, type);
+            intent.PutExtras(extras);
+            
 
 
             //Unique request code to avoid PendingIntent collision.

@@ -18,8 +18,9 @@ namespace XFAzureHubs.Settings
         public static string APNTemplateBody { get; set; } = "{\"aps\":{\"alert\":\"$(messageParam)\"}}";
 
 
-        public static readonly string TITLE_VALUE = "Title";
-        public static readonly string BODY_VALUE = "Body";
-        public static readonly string TYPE_VALUE = "Type";
+        public static readonly string TITLE_VALUE = "title";
+        public static readonly string BODY_VALUE = "body";
+        public static readonly string TYPE_VALUE = "type";
+        public static readonly string ID_VALUE = "id";
     }
 }

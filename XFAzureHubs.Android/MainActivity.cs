@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
@@ -10,6 +9,7 @@ using Android.Content;
 using Android.Gms.Common;
 using XFAzureHubs.Settings;
 using Android.Util;
+using XFAzureHubs.Views;
 
 namespace XFAzureHubs.Droid
 {
@@ -49,6 +49,9 @@ namespace XFAzureHubs.Droid
             if (intent.Extras != null)
             {
                 var type = intent.GetStringExtra(AppConstants.TYPE_VALUE);
+                var id = intent.GetStringExtra(AppConstants.ID_VALUE);
+
+                App.Current.MainPage.Navigation.PushAsync(new SecondPage(type,id));
                 Log.Debug(AppConstants.DebugTag, type);
             }
 
