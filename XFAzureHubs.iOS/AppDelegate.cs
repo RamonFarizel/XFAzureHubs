@@ -32,10 +32,11 @@ namespace XFAzureHubs.iOS
 
             LoadApplication(new App());
 
-            
+            base.FinishedLaunching(app, options);
+
             RegisterForRemoteNotifications();
 
-            return base.FinishedLaunching(app, options);
+            return true;
             
 
         }
