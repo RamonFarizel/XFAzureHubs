@@ -13,7 +13,9 @@ using Android.Util;
 
 namespace XFAzureHubs.Droid
 {
-    [Activity(Label = "XFAzureHubs", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
+    [Activity(Label = "XFAzureHubs", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true,
+        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout
+        | ConfigChanges.SmallestScreenSize, LaunchMode = LaunchMode.SingleTop)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)
@@ -46,8 +48,8 @@ namespace XFAzureHubs.Droid
         {
             if (intent.Extras != null)
             {
-                var message = intent.GetStringExtra("message");
-                Log.Debug(AppConstants.DebugTag, message);
+                var type = intent.GetStringExtra(AppConstants.TYPE_VALUE);
+                Log.Debug(AppConstants.DebugTag, type);
             }
 
             base.OnNewIntent(intent);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Android.App;
 using Android.Content;
@@ -46,23 +47,43 @@ namespace XFAzureHubs.Droid.Services
             base.OnMessageReceived(message);
             string messageBody = string.Empty;
             string messageTitle = string.Empty;
+            string messageType = string.Empty;
 
-            messageTitle = message.Data.Values.First();
-            messageBody = message.Data.Values.Last();
+            var messageDictionary = message.Data.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
+            
+
+            if (messageDictionary.ContainsKey(AppConstants.TITLE_VALUE))
+                messageTitle = GetValueFromMessageDictionary(AppConstants.TITLE_VALUE, messageDictionary);
+
+            if (messageDictionary.ContainsKey(AppConstants.BODY_VALUE))
+                messageBody = GetValueFromMessageDictionary(AppConstants.BODY_VALUE, messageDictionary);
+
+            if (messageDictionary.ContainsKey(AppConstants.TYPE_VALUE))
+                messageType = GetValueFromMessageDictionary(AppConstants.TYPE_VALUE, messageDictionary);
+
+
+
+
+            //messageBody = message.Data.Values.Last();
 
             // convert the incoming message to a local notification
-            SendLocalNotification(messageTitle, messageBody);
+            SendLocalNotification(messageTitle, messageBody, messageType);
 
             // send the incoming message directly to the MainPage
             SendMessageToMainPage(messageBody);
         }
 
-        void SendLocalNotification(string title, string body)
+        string GetValueFromMessageDictionary(string key, Dictionary<string, string> messageDictionary) =>
+            messageDictionary.GetValueOrDefault(key, string.Empty);
+
+
+        void SendLocalNotification(string title, string body, string type)
         {
             var intent = new Intent(this, typeof(MainActivity));
             intent.AddFlags(ActivityFlags.ClearTop);
-            intent.PutExtra("message", body);
+            intent.PutExtra(AppConstants.TYPE_VALUE, type);
+
 
             //Unique request code to avoid PendingIntent collision.
             var requestCode = new Random().Next();
